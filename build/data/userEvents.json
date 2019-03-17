@@ -2,18 +2,18 @@
         "id": "1",
         "userid": "2",
         "type": "LOGIN",
-        "created": 9879472392
+        "created": 1552881599997
     },
     {
         "id": "2",
         "userid": "1",
         "type": "LOGIN",
-        "created": 9879472392
+        "created": 1552880599999
     },
     {
         "id": "3",
         "userid": "2",
         "type": "LOGOUT",
-        "created": 9879472392
+        "created": 1552881599999
     }
 ]
