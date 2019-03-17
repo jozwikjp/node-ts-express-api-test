@@ -1,0 +1,15 @@
+{
+  "swagger": {
+    "outputDirectory": "./dist",
+    "entryFile": "./server.ts",
+    "host": "localhost:8091",
+    "version": "1.0",
+    "name": "Typescript-rest Test API",
+    "description": "a description",
+    "license": "MIT",
+    "basePath": "/",
+    "securityDefinitions": {
+
+    }
+  }
+}

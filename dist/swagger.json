@@ -1,0 +1,16 @@
+{
+	"basePath": "/",
+	"definitions": {},
+	"info": {
+		"description": "a description",
+		"license": {
+			"name": "MIT"
+		},
+		"title": "Typescript-rest Test API",
+		"version": "1.0"
+	},
+	"paths": {},
+	"swagger": "2.0",
+	"securityDefinitions": {},
+	"host": "localhost:8091"
+}
