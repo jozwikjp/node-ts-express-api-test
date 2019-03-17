@@ -1,0 +1,23 @@
+[{
+    "id" : "1",
+    "userid" : "2",
+    "type" : "LOGIN",
+    "created" : 9879472392
+
+ },
+ {
+    "id" : "2",
+    "userid" : "1",
+    "type" : "LOGIN",
+    "created" : 9879472392
+
+ },
+ {
+    "id" : "3",
+    "userid" : "2",
+    "type" : "LOGOUT",
+    "created" : 9879472392
+
+ }
+]
+ 
