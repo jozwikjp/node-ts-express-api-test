@@ -8,4 +8,4 @@ const app = express_1.default();
 app.get("/", (req, res, next) => {
     res.send("tour booking api");
 });
-app.listen(process.env.PORT || 8091, () => { console.log("Server started ..."); });
+app.listen(process.env.PORT || 80, () => { console.log("Server started ..."); });
