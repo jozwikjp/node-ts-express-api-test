@@ -1,100 +1,97 @@
-h1. {toc:outline=true|style=none}
-{info}{color:#0077CC}NS8 {color}[https://github.com/ns8inc/ns8-tech-assessment|https://github.com/ns8inc/ns8-tech-assessment]{info}
-\\
 
-\\
+# Problem
+Assume that NS8 has contracted you to build a small **RESTful API** to support their new user tracking software.  There are many node.js frameworks that could help you with this.  For example, express, restify etc.  
 
-\\
+Data does not need to be persisted between server restarts. 
+
+## Data definition
+
+### User
+- email
+  - string
+  - This field is required to create a new user
+  - The system must only allow 1 user per unique email address
+  
+  ```json
+  {    "status": "fail",    "message": "email address already exists"}
 
 
+- password
+  - string
+  - This field is required to create a new user
+- phone number 
+  - string
+  - This field is optional
+  - When provided, the phone number must follow this pattern ###-###-####
+  
+  ```typescript app.post("/users", jsonParser,[
+    // email must be an email
+    check('email').isEmail(),
+    check('password').not().isEmpty(),
+    check('phone').isMobilePhone().optional() ], apiCreateUser); ```
 
-h1. Create user
 
-h1. Post {color:#505050}[http://localhost:8091/users|http://localhost:8091/users]{color}
+### Event
+- type
+  - This field is required to create a new event
+  - The value can be any non-empty string
+  
+ ```typescript
+export class UserEvents {
+    id: string
+    userid: string
+    type: string
+    created: string
 
-!image2019-3-17_17-15-43.png!
+    constructor(data: any) {
+        if (!data.type) {
+            throw new Error("Type is required for event");
+        }
+        this.id = data.id;
+        this.userid = data.userid;
+        this.type = data.type;
+        this.created = data.created;
 
-\\
+    }
+}
 
-{code}{
+```
+ 
+## Data examples
+
+The following input json would create a user POST /users
+```json
+{
+  "email": "test@ns8.com",
+  "password": "passwordIsPizza",
+  "phone": "333-222-1111"
+}
+```
+Respone 
+```json
+
+{
     "status": "Success",
-    "message": "Created new userid: 756c8349-081c-4d4e-8e70-221783013104"
-}
-{code}
-
-
-h2. Create User Validation
-
-h3. Invalid number
-
-h1. {code:title=Response}{
-   "firstName" : "Marcos",
-   "lastName" : "Silssdva",
-   "email" : "joes@test.test",
-   "password" : "s3cr3tp4sswo4rd",
-   "phone": "248-555-12212"
+    "message": "Created new userid: ad8b51d0-d2fb-49bd-a748-546cf3dea8dc"
 }
 
+```
+Also creates event
 
+```json
+    {
+        "id": "46ae3ed7-824c-402b-bbf9-2973e7315c6a",
+        "userid": "ad8b51d0-d2fb-49bd-a748-546cf3dea8dc",
+        "type": "CREATED",
+        "created": 1552866927637
+    }
 
-{code}
+```
 
-\\
-\\
+Get Users Summary List GET /users
 
-{code:title=Response}{
-    "errors": [
-        {
-            "location": "body",
-            "param": "phone",
-            "value": "248-555-12212",
-            "msg": "Invalid value"
-        }
-    ]
-}
-{code}
-
-
-h3. Invalid Email and phone
-
-h1. {code:title=Response}{
-    "errors": [
-        {
-            "location": "body",
-            "param": "email",
-            "value": "joestest.test",
-            "msg": "Invalid value"
-        },
-        {
-            "location": "body",
-            "param": "phone",
-            "value": "248-555-12s12",
-            "msg": "Invalid value"
-        }
-    ]
-}
-{code}
-
-\\
-
-
-
-h3. Duplicate Email Validation
-
-h1. {code:title=Response}{
-    "status": "fail",
-    "message": "email address already exists"
-}
-{code}
-
-\\
-
-
-
-h1. List all users summary
-
-h1. GET /users/
-{code}[
+```json
+[
     {
         "id": "1",
         "email": "joes@email.com",
@@ -106,69 +103,27 @@ h1. GET /users/
         "phone": "248-555-1212"
     },
     {
-        "id": "3e6dbe9e-2d02-4b9e-9eb2-1e9126a655c7",
-        "email": "joest@est.test",
-        "phone": "248-555-1212"
-    },
-    {
-        "id": "a38971cc-d28f-4e12-b8e3-a25ea29b6ef0",
+        "id": "ad8b51d0-d2fb-49bd-a748-546cf3dea8dc",
         "email": "joes2t@est.test",
         "phone": "248-555-1212"
     }
 ]
-{code}
 
-\\
+``` 
 
-
-
-h1. \\
-Get User Details with all events
-
-h1. {color:#505050}GET [http://localhost:8091/users/|http://localhost:8091/users/0b46c732-5592-4f64-8d9f-59b35203cd80]:id{color}
-
-!image2019-3-17_17-33-57.png!
-{code:title=Response}{
-    "id": "2",
-    "email": "joes@othermail.com",
-    "phone": "248-555-1212",
-    "firstName": "Bill",
-    "lastName": "Test",
-    "events": [
-        {
-            "id": "1",
-            "userid": "2",
-            "type": "LOGIN",
-            "created": 1552881599997
-        },
-        {
-            "id": "3",
-            "userid": "2",
-            "type": "LOGOUT",
-            "created": 1552881599999
-        }
-    ]
+___
+Not complete - The following input json would create an event with the type LOGIN 
+```json
+{
+  "type": "LOGIN"
 }
+```
+___
 
-
-
-
-
-
-{code}
-
-\\
-
-
-\\
-
-
-
-h1. Returning Events
-
-h2.  return all events for all users: {color:#505050}[http://localhost:8091/events/user/|http://localhost:8091/events/user/2]all{color}
-
-h1. {code:title=Response}[
+The following use cases should be satisfied to get user event data
+- return all events for all users /events/user/all
+```json
+[
     {
         "id": "1",
         "userid": "2",
@@ -188,12 +143,13 @@ h1. {code:title=Response}[
         "created": 1552881599999
     }
 ]
-{code}
 
+```
 
-h2. *return all events for a single user : {color:#505050}[http://localhost:8091/events/user/|http://localhost:8091/events/user/1]:userid {color}*
+- return all events for a single user /events/user/:userid
 
-h1. {code:title=Response}[
+```json
+[
     {
         "id": "1",
         "userid": "2",
@@ -207,15 +163,12 @@ h1. {code:title=Response}[
         "created": 1552881599999
     }
 ]
-{code}
+```
 
-\\
+- return all events for the last day /events/user/day
 
 
-
-h3. {color:#505050}return all events for last day [http://localhost:8091/events/user/day|http://localhost:8091/events/all]{color}
-
-h1. {code:title=Response}[
+```json [
     {
         "id": "1",
         "userid": "2",
@@ -235,39 +188,11 @@ h1. {code:title=Response}[
         "created": 1552881599999
     }
 ]
-{code}
 
-{color:#505050}\\
-{color}
+```
 
+The json data returned should at least have the following elements - Create Even
 
-h3. return all events for all time /events/user/all
-
-h1. {code:title=Response}{
-    "id": "2",
-    "email": "joes@othermail.com",
-    "phone": "248-555-1212",
-    "firstName": "Bill",
-    "lastName": "Test",
-    "events": [
-        {
-            "id": "1",
-            "userid": "2",
-            "type": "LOGIN",
-            "created": 1552881599997
-        },
-        {
-            "id": "3",
-            "userid": "2",
-            "type": "LOGOUT",
-            "created": 1552881599999
-        }
-    ]
-}
-
-
-
-{code}
-
-\\
+where `created` is the date the event was created.  Choose any date format. 
+___
 

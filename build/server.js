@@ -27,6 +27,7 @@ app.get("/events/user/:userid", apiGetUseEventsForDay_1.apiGetUserEventsForDay);
 app.post("/users", jsonParser, [
     // email must be an email
     check('email').isEmail(),
-    check('phone').isMobilePhone()
+    check('password').not().isEmpty(),
+    check('phone').isMobilePhone().optional()
 ], apiCreateUser_1.apiCreateUser);
 app.listen(process.env.PORT || 8091, () => { console.log("Server started ..."); });

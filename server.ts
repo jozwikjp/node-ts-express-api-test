@@ -20,7 +20,8 @@ app.get("/events/user/:userid", apiGetUserEventsForDay);
 app.post("/users", jsonParser,[
     // email must be an email
     check('email').isEmail(),
-    check('phone').isMobilePhone()
+    check('password').not().isEmpty(),
+    check('phone').isMobilePhone().optional()
 
 ], apiCreateUser);
 

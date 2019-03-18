@@ -14,5 +14,4 @@ export class UserEvents {
         this.created = data.created;
 
     }
-
 }
